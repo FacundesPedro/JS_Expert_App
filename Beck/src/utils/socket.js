@@ -1,8 +1,9 @@
-const http = require('http')
-const {Server} = require('socket.io')
+import http from 'http'
+import { Server } from 'socket.io'
+import { constants } from './constants.js'
 
 
-module.exports = class socketServer{
+export default class SocketServer{
     #io
     constructor({ port }){
         this.port = port
@@ -23,6 +24,16 @@ module.exports = class socketServer{
                 origin:'*',
                 credentials: false
             }
+        })
+
+        const room_socket = this.#io.of('/room')
+
+        room_socket.on(constants.events.CONNECTED,socket =>{
+            socket.emit(constants.events.USER_CONNECTED,'Seja bem-vindo user com socket id: ',socket.id)
+
+            socket.on(constants.events.JOIN_ROOM,(data) =>{
+                console.log('Dados Recebidos pelo servidor: ',data)
+            })
         })
 
         return new Promise((resolve,reject) =>{

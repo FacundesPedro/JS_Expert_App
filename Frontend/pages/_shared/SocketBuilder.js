@@ -1,4 +1,4 @@
-import constants from "./constants";
+import {constants} from "./constants.js";
 
 export default class SocketBuilder{
     constructor( { socketUrl,namespace } ){
@@ -20,13 +20,15 @@ export default class SocketBuilder{
     }
 
     build(){
-        const socket = globalThis.io.connect(this.socketUrl,{
+        const socket = globalThis.io(this.socketUrl,{
             withCredentials:false
         })
 
         socket.on(constants.events.CONNECTED,( () => console.log('WS CONNECTED!')))
-        socket.on(constants.events.USER_CONNECTED,() => console.log('User Connected'))
-        socket.on(constants.events.USER_DISCONNECTED,() => console.log('User Disconnected'))
+        socket.on(constants.events.USER_CONNECTED,this.onUserConnected)
+        socket.on(constants.events.USER_DISCONNECTED,this.onUserDisconnected)
+
+        return socket
     }
 
 }

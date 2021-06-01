@@ -1,5 +1,5 @@
-export default constants = {
-    socketUrl:'http://localhost',
+export const constants = {
+    socketUrl:'http://localhost:3000',
     socketNamespaces:{
         room:'room',
         lobby:'lobby'
