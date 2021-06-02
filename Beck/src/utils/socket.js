@@ -7,6 +7,23 @@ export default class SocketServer{
     #io
     constructor({ port }){
         this.port = port
+        this.namespace = {}
+    }
+
+    attachEvents(routeConfig){
+        for(const routes of routeConfig){
+            for(const [namespace,{events,eventEmitter}] of Object.entries(routes)){
+                const route = this.namespace[namespace] = this.#io.of(`/${namespace}`)
+                
+                route.on('connection',socket =>{
+                    for(const [fnName,fnValue] of events){
+                        socket.on(fnName,(...agrs) => fnValue(socket,...agrs))
+                    }  
+                    
+                    eventEmitter.emit(constants.events.USER_CONNECTED,socket)
+                })
+            }   
+        }
     }
 
     async start() {
@@ -26,15 +43,6 @@ export default class SocketServer{
             }
         })
 
-        const room_socket = this.#io.of('/room')
-
-        room_socket.on(constants.events.CONNECTED,socket =>{
-            socket.emit(constants.events.USER_CONNECTED,'Seja bem-vindo user com socket id: ',socket.id)
-
-            socket.on(constants.events.JOIN_ROOM,(data) =>{
-                console.log('Dados Recebidos pelo servidor: ',data)
-            })
-        })
 
         return new Promise((resolve,reject) =>{
             server.on('error',reject)

@@ -2,14 +2,14 @@ import { constants } from "../../_shared/constants.js";
 import SocketBuilder from "../../_shared/SocketBuilder.js";
 
 
-const socket = new SocketBuilder({
+const socketBuilder = new SocketBuilder({
     socketUrl:constants.socketUrl,
     namespace:constants.socketNamespaces.room
 })
 
-const io = socket
-    .setOnUserConnected((user) => console.log('User Connected',user))
-    .setOnUserDisconnected((user) => console.log('User Disconnected',user)) 
+const io = socketBuilder //var "io" is the emiting and listing object from socketBuilder instance 
+    .setOnUserConnected((user) => console.log('User Connected', user))
+    .setOnUserDisconnected((user) => console.log('User Disconnected', user)) 
     .build()
 
 const room = {
@@ -22,4 +22,7 @@ const user = {
     name:'FacundesPedro'
 }
 
-io.emit(constants.events.JOIN_ROOM,{room,user})
+io.emit(constants.events.JOIN_ROOM,{user,room}) //told ya
+io.on(constants.events.USER_CONNECTED, data =>{
+    console.log('User Connected!',data)
+})
