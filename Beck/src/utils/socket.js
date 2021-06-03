@@ -13,9 +13,9 @@ export default class SocketServer{
     attachEvents(routeConfig){
         for(const routes of routeConfig){
             for(const [namespace,{events,eventEmitter}] of Object.entries(routes)){
-                const route = this.namespace[namespace] = this.#io.of(`/${namespace}`)
+                const namespace_route = this.namespace[namespace] = this.#io.of(`/${namespace}`)
                 
-                route.on('connection',socket =>{
+                namespace_route.on('connection',socket =>{
                     for(const [fnName,fnValue] of events){
                         socket.on(fnName,(...agrs) => fnValue(socket,...agrs))
                     }  

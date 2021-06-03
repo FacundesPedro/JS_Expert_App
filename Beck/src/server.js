@@ -15,7 +15,7 @@ const namespaces = {
 const routeConfig = Object.entries(namespaces).map(([namespace,{controller,eventEmitter}])=>{
     const controllerEvents = controller.getEvents()
     eventEmitter.on(constants.events.USER_CONNECTED,controller.onNewConnection.bind(controller))
-
+    
     return {
         [namespace]:{events:controllerEvents,eventEmitter}
     }

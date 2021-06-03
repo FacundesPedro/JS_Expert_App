@@ -19,7 +19,7 @@ const room = {
 
 const user = {
     img:'',
-    name:'FacundesPedro'
+    name:'PAi_Efi'
 }
 
 io.emit(constants.events.JOIN_ROOM,{user,room}) //told ya
