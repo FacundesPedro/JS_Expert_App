@@ -40,16 +40,17 @@ export default class RoomsController{
         console.log('Connection Stablished with the Socket ID: ',userId)
     }
 
-    joinRoom(socket,{user,...room}){
+    joinRoom(socket,{user,room}){
         const userId = user.id = socket.id
         const roomId = room.id 
+        
         const updated_user = this.#update_global_UserData(
             userId,
             user,
             roomId
         ) 
 
-        console.log({updated_user})
+        console.log( {updated_user} )
         
         socket.emit(constants.events.USER_CONNECTED,updated_user)
     }
